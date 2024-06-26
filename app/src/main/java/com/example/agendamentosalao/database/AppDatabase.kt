@@ -4,15 +4,19 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.agendamentosalao.database.daos.AppointmentDao
 import com.example.agendamentosalao.database.daos.UserDao
-import com.example.agendamentosalao.database.models.Appointments
+import com.example.agendamentosalao.database.models.Appointment
 import com.example.agendamentosalao.database.models.User
 
-@Database(entities = [User::class, Appointments::class], version = 1, exportSchema = false)
+
+@Database(entities = [Appointment::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun userDao(): UserDao
-    companion object{
+    //abstract fun userDao(): UserDao
+    abstract fun appointmentDao(): AppointmentDao
+
+    companion object {
 
         @Volatile
         private var Instance: AppDatabase? = null

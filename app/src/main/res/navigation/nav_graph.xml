@@ -36,7 +36,15 @@
         android:id="@+id/scheduleAppointmentFragment"
         android:name="com.example.agendamentosalao.ui.fragments.ScheduleAppointmentFragment"
         android:label="Agende seu horário"
-        tools:layout="@layout/fragment_schedule_appointment" />
+        tools:layout="@layout/fragment_schedule_appointment" >
+        <action
+            android:id="@+id/action_scheduleAppointmentFragment_to_mainFragment"
+            app:destination="@id/mainFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.agendamentosalao.ui.fragments.SettingsFragment"
