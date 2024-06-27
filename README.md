@@ -1,11 +1,14 @@
-# AgendamentoSalao
--App em desenolvimento para estudos 
+# Agendamento Salao
+- App não concluído, ainda em desenvolvimento para estudos.
 
-# Foco dos Estudos:
-Apendrizagem dos conceitos/Bibliotecas:
--MVVM
--Room
--Navigation
--LiveData
--ViewModel
--Coroutines
+## Ideia Inicial
+ - Desenvolver um app simples para agendamentos de horário de um salão de beleza pequeno.
+
+## Foco dos Estudos:
+Aprendizagem dos conceitos/Bibliotecas:
+- MVVM
+- Room
+- Navigation
+- LiveData
+- ViewModel
+- Coroutines
