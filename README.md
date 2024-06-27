@@ -1,2 +1,11 @@
 # AgendamentoSalao
-App em desenolvimento para estudos com foco na aprendizagem dos conceitos de MVVM utilizando Room database + LiveData + ViewModel + Navigation
+-App em desenolvimento para estudos 
+
+# Foco dos Estudos:
+Apendrizagem dos conceitos/Bibliotecas:
+-MVVM
+-Room
+-Navigation
+-LiveData
+-ViewModel
+-Coroutines
