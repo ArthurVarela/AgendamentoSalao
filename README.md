@@ -1,2 +1,2 @@
 # AgendamentoSalao
-App para agendamento de horários de um salão
+App em desenolvimento para estudos com foco na aprendizagem dos conceitos de MVVM utilizando Room database + LiveData + ViewModel + Navigation
