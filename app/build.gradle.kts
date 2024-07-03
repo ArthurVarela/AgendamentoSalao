@@ -61,7 +61,10 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
     //implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycle_version")
 
+
     //implementation("org.jetbrains.kotlin:kotlin-stdblib-jdk7:1.5.10")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0-RC")
 
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.7.0")

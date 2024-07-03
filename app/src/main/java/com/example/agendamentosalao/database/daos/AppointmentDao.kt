@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.agendamentosalao.database.models.Appointment
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AppointmentDao {
@@ -13,6 +14,9 @@ interface AppointmentDao {
 
     @Query("SELECT COUNT(id) FROM appointments")
     suspend fun getTotalItems(): Long
+
+    @Query("SELECT * FROM appointments")
+    fun getAllAppointments(): Flow<List<Appointment>>
 
     @Query("DELETE FROM appointments")
     suspend fun deleteAll()

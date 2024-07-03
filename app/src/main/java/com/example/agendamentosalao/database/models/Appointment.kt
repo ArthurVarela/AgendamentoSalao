@@ -7,8 +7,9 @@ import androidx.room.PrimaryKey
 @Entity("appointments")
 data class Appointment(
     @ColumnInfo("client_name") val clientName: String,
-    val todayDateTime: String = "",
-    val appointmentDateTime: String = ""
+    @ColumnInfo("created_at") val todayDateTime: String = "",
+    @ColumnInfo("appointment_date") val appointmentDate: String = "",
+    @ColumnInfo("appointment_hour") val appointmentHour: String = ""
 ) {
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 }

@@ -5,35 +5,41 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.agendamentosalao.R
+import com.example.agendamentosalao.application.SalonScheduleApplication
 import com.example.agendamentosalao.database.AppDatabase
 import com.example.agendamentosalao.database.daos.AppointmentDao
 import com.example.agendamentosalao.database.models.Appointment
 import com.example.agendamentosalao.databinding.FragmentScheduleAppointmentBinding
+import com.example.agendamentosalao.repository.AppointmentRepository
+import com.example.agendamentosalao.ui.viewmodels.AppointmentViewModel
+import com.example.agendamentosalao.ui.viewmodels.AppointmentViewModelFactory
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Date
+import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Locale
-import kotlin.math.log
 
 class ScheduleAppointmentFragment : Fragment(R.layout.fragment_schedule_appointment) {
 
     private lateinit var binding: FragmentScheduleAppointmentBinding
-    private lateinit var database: AppDatabase
-    private lateinit var appointmentDao: AppointmentDao
     private lateinit var name: String
+    private lateinit var calendar: Calendar
+
+    private val appointmentViewModel: AppointmentViewModel by viewModels {
+        AppointmentViewModelFactory((requireActivity().application as SalonScheduleApplication).repository  )
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        database = AppDatabase.getDatabase(requireContext())
-        appointmentDao = database.appointmentDao()
-
+        calendar = Calendar.getInstance()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,6 +48,31 @@ class ScheduleAppointmentFragment : Fragment(R.layout.fragment_schedule_appointm
 
         binding.btnSchedule.setOnClickListener {
             if ( fieldValidation() ) {
+                initializeAlertDialogAndSave()
+            }
+        }
+
+        binding.btnDelete.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                appointmentViewModel.deleteAll()
+            }
+        }
+
+        binding.btnTeste.setOnClickListener {
+
+            val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+            val formattedDateTime = dateFormat.format(calendar.time)
+
+            Log.i("", "data formatada: $formattedDateTime")
+        }
+    }
+
+    private fun initializeAlertDialogAndSave() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Confirmação de Agendamento")
+            .setMessage("Voce está agendando para 01/07/23 - 07:00, voce tem certeza disso ?")
+            .setNegativeButton("Não, quero outra data"){ dialog, position -> }
+            .setPositiveButton("Agendar"){dialog, position ->
                 CoroutineScope(Dispatchers.IO).launch {
 
                     val result = saveAppointment(name)
@@ -56,20 +87,16 @@ class ScheduleAppointmentFragment : Fragment(R.layout.fragment_schedule_appointm
                     }
                 }
             }
-        }
-
-        binding.btnDelete.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                appointmentDao.deleteAll()
-            }
-        }
+            .show()
     }
 
-    private suspend fun saveAppointment(name: String): Boolean {
+    private fun saveAppointment(name: String): Boolean {
         if ( name.isEmpty() || name.isBlank() )
             return false
 
-        appointmentDao.insert(Appointment(name, "26/06/2023 - 15:00", "01/07/23 - 07:00"))
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+        val formattedDateTime = dateFormat.format(calendar.time)
+        appointmentViewModel.insert(Appointment(name, formattedDateTime, "20/07", "08:00"))
         return  true
     }
 
@@ -85,6 +112,5 @@ class ScheduleAppointmentFragment : Fragment(R.layout.fragment_schedule_appointm
             false
         }
     }
-
 
 }

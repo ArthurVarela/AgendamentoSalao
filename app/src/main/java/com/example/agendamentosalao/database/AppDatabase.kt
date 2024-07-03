@@ -8,9 +8,10 @@ import com.example.agendamentosalao.database.daos.AppointmentDao
 import com.example.agendamentosalao.database.daos.UserDao
 import com.example.agendamentosalao.database.models.Appointment
 import com.example.agendamentosalao.database.models.User
+import kotlinx.coroutines.CoroutineScope
 
 
-@Database(entities = [Appointment::class], version = 1, exportSchema = false)
+@Database(entities = [Appointment::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     //abstract fun userDao(): UserDao
@@ -21,9 +22,9 @@ abstract class AppDatabase : RoomDatabase() {
         @Volatile
         private var Instance: AppDatabase? = null
 
-        fun getDatabase(context: Context): AppDatabase {
+        fun getDatabase(context: Context, scope: CoroutineScope): AppDatabase {
             return Instance ?: synchronized(this) {
-                Room.databaseBuilder(context, AppDatabase::class.java, "salon_scheduling")
+                Room.databaseBuilder(context, AppDatabase::class.java, "salon_schedule")
                     .fallbackToDestructiveMigration()
                     .build()
                     .also { Instance = it }

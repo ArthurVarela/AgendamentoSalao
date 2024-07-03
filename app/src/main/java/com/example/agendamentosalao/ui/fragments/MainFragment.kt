@@ -16,7 +16,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         binding = FragmentMainBinding.bind(view)
 
         binding.btnMainSchedule.setOnClickListener {
-
             findNavController().navigate(R.id.action_mainFragment_to_scheduleAppointmentFragment)
         }
 
