@@ -49,11 +49,10 @@ class UserAppointmentsFragment : Fragment(R.layout.fragment_user_appointments) {
         binding = FragmentUserAppointmentsBinding.bind(view)
 
         setupRecyclerView()
-
     }
 
     private fun setupRecyclerView() {
-        userAppointmentsAdapter = UserAppointmentsAdapter()
+        userAppointmentsAdapter = UserAppointmentsAdapter(findNavController(), appointmentViewModel)
         binding.rvUserAppointments.adapter = userAppointmentsAdapter
         binding.rvUserAppointments.layoutManager = LinearLayoutManager(context)
     }

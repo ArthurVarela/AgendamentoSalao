@@ -2,14 +2,21 @@ package com.example.agendamentosalao.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.NavController
 import androidx.recyclerview.widget.RecyclerView.Adapter
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.example.agendamentosalao.R
 import com.example.agendamentosalao.database.models.Appointment
 import com.example.agendamentosalao.databinding.ItemAppointmentListBinding
+import com.example.agendamentosalao.ui.viewmodels.AppointmentViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Locale
 
-class UserAppointmentsAdapter() : Adapter<UserAppointmentsAdapter.UserAppointmentsViewHolder>() {
+class UserAppointmentsAdapter(
+    private val navController: NavController,
+    private val appointmentViewModel: AppointmentViewModel
+) : Adapter<UserAppointmentsAdapter.UserAppointmentsViewHolder>() {
 
     private var appointmentsList = emptyList<Appointment>()
     fun addList(list: List<Appointment>){
@@ -26,9 +33,26 @@ class UserAppointmentsAdapter() : Adapter<UserAppointmentsAdapter.UserAppointmen
 
         fun bind(appointment: Appointment){
 
-            binding.textMonthYear.text = calendar.get(Calendar.MONTH + 1).toString()
+            val dateMonthYear = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
+
+            binding.textMonthYear.text = dateMonthYear.format(calendar.time)
             binding.textDay.text = appointment.appointmentDate
             binding.textHour.text = appointment.appointmentHour
+            binding.fabEdit.setOnClickListener {
+                delete(appointment)
+            }
+        }
+
+        private fun delete(appointment: Appointment) {
+            val context = binding.root.context
+            MaterialAlertDialogBuilder(context)
+                .setTitle("Cancelar Agendamento")
+                .setMessage("voce está prestes a cancelar este agendamento, deseja continuar ?")
+                .setNegativeButton("Não"){dialog, position -> }
+                .setPositiveButton("Sim, Cancelar"){ dialog, position ->
+                    appointmentViewModel.deleteAppointment(appointment)
+                }
+                .show()
         }
 
     }

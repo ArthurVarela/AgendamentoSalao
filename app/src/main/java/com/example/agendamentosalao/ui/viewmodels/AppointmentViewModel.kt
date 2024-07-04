@@ -13,12 +13,16 @@ class AppointmentViewModel(private val repository: AppointmentRepository) : View
 
     val allAppointments: LiveData<List<Appointment>> = repository.getAllAppointments.asLiveData()
 
+    fun insert(appointment: Appointment) = viewModelScope.launch {
+        repository.insert(appointment)
+    }
+
     fun deleteAll() = viewModelScope.launch {
         repository.deleteAll()
     }
 
-    fun insert(appointment: Appointment) = viewModelScope.launch {
-        repository.insert(appointment)
+    fun deleteAppointment(appointment: Appointment) = viewModelScope.launch {
+        repository.deleteAppointment(appointment)
     }
 }
 

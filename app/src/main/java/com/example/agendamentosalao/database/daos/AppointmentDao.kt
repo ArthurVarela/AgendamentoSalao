@@ -1,6 +1,7 @@
 package com.example.agendamentosalao.database.daos
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.agendamentosalao.database.models.Appointment
@@ -21,5 +22,7 @@ interface AppointmentDao {
     @Query("DELETE FROM appointments")
     suspend fun deleteAll()
 
+    @Delete
+    suspend fun deleteAppointment(appointment: Appointment)
 
 }

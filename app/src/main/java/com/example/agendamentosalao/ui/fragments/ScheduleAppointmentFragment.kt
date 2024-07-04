@@ -9,13 +9,13 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.example.agendamentosalao.R
 import com.example.agendamentosalao.application.SalonScheduleApplication
-import com.example.agendamentosalao.database.AppDatabase
-import com.example.agendamentosalao.database.daos.AppointmentDao
 import com.example.agendamentosalao.database.models.Appointment
 import com.example.agendamentosalao.databinding.FragmentScheduleAppointmentBinding
-import com.example.agendamentosalao.repository.AppointmentRepository
 import com.example.agendamentosalao.ui.viewmodels.AppointmentViewModel
 import com.example.agendamentosalao.ui.viewmodels.AppointmentViewModelFactory
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,12 +23,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 class ScheduleAppointmentFragment : Fragment(R.layout.fragment_schedule_appointment) {
 
     private lateinit var binding: FragmentScheduleAppointmentBinding
     private lateinit var name: String
+    private lateinit var appointmentDate: String
+    private lateinit var appointmentHour: String
     private lateinit var calendar: Calendar
 
     private val appointmentViewModel: AppointmentViewModel by viewModels {
@@ -53,29 +57,56 @@ class ScheduleAppointmentFragment : Fragment(R.layout.fragment_schedule_appointm
         }
 
         binding.btnDelete.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
+            try {
                 appointmentViewModel.deleteAll()
+            }catch (e: Exception){
+                e.printStackTrace()
             }
         }
 
-        binding.btnTeste.setOnClickListener {
-
-            val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-            val formattedDateTime = dateFormat.format(calendar.time)
-
-            Log.i("", "data formatada: $formattedDateTime")
+        binding.textInputDateLayout.setEndIconOnClickListener {
+            showDatePicker()
         }
+
+        /*binding.editDate.setOnClickListener {
+            showDatePicker()
+        }*/
     }
 
+    private fun showDatePicker() {
+        val constraintBuilder =
+            CalendarConstraints.Builder()
+                .setValidator(DateValidatorPointForward.now())
+                .build()
+
+        val datePicker =
+            MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select date")
+                .setCalendarConstraints(constraintBuilder)
+                .build()
+
+        datePicker.show(parentFragmentManager, "teste")
+
+    }
+
+
     private fun initializeAlertDialogAndSave() {
+
+        name = binding.EditName.text.toString()
+        appointmentDate = "30/07"
+        appointmentHour = "14:00"
+        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
+        val formattedDateTime = dateFormat.format(calendar.time)
+        val appointment = Appointment(name, formattedDateTime, appointmentDate, appointmentHour)
+
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Confirmação de Agendamento")
-            .setMessage("Voce está agendando para 01/07/23 - 07:00, voce tem certeza disso ?")
+            .setMessage("Voce está agendando para  - $appointmentDate - $appointmentHour, voce tem certeza disso ?")
             .setNegativeButton("Não, quero outra data"){ dialog, position -> }
-            .setPositiveButton("Agendar"){dialog, position ->
+            .setPositiveButton("Agendar"){ dialog, position ->
                 CoroutineScope(Dispatchers.IO).launch {
 
-                    val result = saveAppointment(name)
+                    val result = saveAppointment(appointment)
 
                     withContext(Dispatchers.Main){
                         if (result) {
@@ -90,14 +121,14 @@ class ScheduleAppointmentFragment : Fragment(R.layout.fragment_schedule_appointm
             .show()
     }
 
-    private fun saveAppointment(name: String): Boolean {
-        if ( name.isEmpty() || name.isBlank() )
-            return false
-
-        val dateFormat = SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault())
-        val formattedDateTime = dateFormat.format(calendar.time)
-        appointmentViewModel.insert(Appointment(name, formattedDateTime, "20/07", "08:00"))
-        return  true
+    private fun saveAppointment(appointment: Appointment): Boolean {
+        return try {
+            appointmentViewModel.insert(appointment)
+             true
+        }catch (e: Exception){
+            e.printStackTrace()
+            false
+        }
     }
 
     private fun fieldValidation(): Boolean {
