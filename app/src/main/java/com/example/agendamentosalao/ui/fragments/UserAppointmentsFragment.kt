@@ -40,10 +40,8 @@ class UserAppointmentsFragment : Fragment(R.layout.fragment_user_appointments) {
                 findNavController().popBackStack()
             }
         })
-
-
-
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentUserAppointmentsBinding.bind(view)

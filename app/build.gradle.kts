@@ -29,6 +29,9 @@ android {
         }
     }
     compileOptions {
+        //With this we achieve that the minimum SDK the LocalDateTime Api needs goes down to 21
+        isCoreLibraryDesugaringEnabled = true
+
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -43,6 +46,7 @@ android {
 
 dependencies {
 
+    implementation("androidx.gridlayout:gridlayout:1.0.0")
     val nav_version = "2.7.7"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
@@ -61,6 +65,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version")
     //implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycle_version")
 
+    //With this we achieve that the minimum SDK the LocalDateTime Api needs goes down to 21
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 
     //implementation("org.jetbrains.kotlin:kotlin-stdblib-jdk7:1.5.10")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC")

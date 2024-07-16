@@ -29,16 +29,11 @@ class UserAppointmentsAdapter(
         private val binding: ItemAppointmentListBinding
     ) : ViewHolder(binding.root){
 
-        private val calendar = Calendar.getInstance()
-
         fun bind(appointment: Appointment){
 
-            val dateMonthYear = SimpleDateFormat("MMMM yyyy", Locale.getDefault())
-
-            binding.textMonthYear.text = dateMonthYear.format(calendar.time)
             binding.textDay.text = appointment.appointmentDate
             binding.textHour.text = appointment.appointmentHour
-            binding.fabEdit.setOnClickListener {
+            binding.imageButtonDelete.setOnClickListener {
                 delete(appointment)
             }
         }
@@ -47,9 +42,9 @@ class UserAppointmentsAdapter(
             val context = binding.root.context
             MaterialAlertDialogBuilder(context)
                 .setTitle("Cancelar Agendamento")
-                .setMessage("voce está prestes a cancelar este agendamento, deseja continuar ?")
+                .setMessage("Você está prestes a cancelar este agendamento. Deseja continuar?")
                 .setNegativeButton("Não"){dialog, position -> }
-                .setPositiveButton("Sim, Cancelar"){ dialog, position ->
+                .setPositiveButton("Sim, cancelar"){ dialog, position ->
                     appointmentViewModel.deleteAppointment(appointment)
                 }
                 .show()
