@@ -1,17 +1,13 @@
 package com.example.agendamentosalao.ui.fragments
 
-import android.database.CrossProcessCursor
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.ViewGroup
-import android.widget.GridLayout
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.view.forEach
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.agendamentosalao.R
 import com.example.agendamentosalao.application.SalonScheduleApplication
@@ -39,22 +35,17 @@ class ScheduleAppointmentFragment : Fragment(R.layout.fragment_schedule_appointm
     private lateinit var name: String
     private lateinit var appointmentDate: String
     private var appointmentHour: String? = null
-    //private lateinit var date: String
-    private lateinit var newAppointment: Appointment
+    private lateinit var appointmentService: String
 
     private val appointmentViewModel: AppointmentViewModel by viewModels {
         AppointmentViewModelFactory((requireActivity().application as SalonScheduleApplication).repository  )
     }
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentScheduleAppointmentBinding.bind(view)
+
+        setupServiceMenu()
 
         binding.btnSchedule.setOnClickListener {
             if ( fieldValidation() ) {
@@ -63,15 +54,6 @@ class ScheduleAppointmentFragment : Fragment(R.layout.fragment_schedule_appointm
                 }else{
                     Toast.makeText(requireContext(), "Escolha um dos horários disponíveis!", Toast.LENGTH_SHORT).show()
                 }
-
-            }
-        }
-
-        binding.btnDelete.setOnClickListener {
-            try {
-                appointmentViewModel.deleteAll()
-            }catch (e: Exception){
-                e.printStackTrace()
             }
         }
 
@@ -83,10 +65,19 @@ class ScheduleAppointmentFragment : Fragment(R.layout.fragment_schedule_appointm
         binding.textInputDate.setEndIconOnClickListener {
             showDatePicker()
         }
+    }
 
-        binding.teste.setOnClickListener {
+    private fun setupServiceMenu() {
+        val items = arrayOf(
+            "Corte de Cabelo Feminino",
+            "Corte de Cabelo Masculino",
+            "Corte de Cabelo + Barba",
+            "Blindagem Orgânica"
+        )
 
-        }
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, items )
+        val autoCompleteMenu = binding.autoCompleteMenu
+        autoCompleteMenu.setAdapter(adapter)
     }
 
     private fun showDatePicker() {
@@ -149,6 +140,7 @@ class ScheduleAppointmentFragment : Fragment(R.layout.fragment_schedule_appointm
 
             withContext(Dispatchers.Main) {
 
+                //Clear all views from the gridlayout
                 binding.gridLayout.removeAllViews()
 
                 //remove hours that already exists from the hours available list
@@ -169,7 +161,11 @@ class ScheduleAppointmentFragment : Fragment(R.layout.fragment_schedule_appointm
                             ViewGroup.LayoutParams.WRAP_CONTENT
                         )
                         text = hour
+
+                        //Click Listener for the buttons
                         setOnClickListener {
+
+                            //Highlight the selected button
                             selectedHour(hour)
                         }
                     }
@@ -180,6 +176,7 @@ class ScheduleAppointmentFragment : Fragment(R.layout.fragment_schedule_appointm
     }
 
     private fun selectedHour(hour: String) {
+        //Clear highlighted buttons first
         clearSelection()
 
         //highlight the selected Button
@@ -200,14 +197,12 @@ class ScheduleAppointmentFragment : Fragment(R.layout.fragment_schedule_appointm
                 view.setBackgroundColor(requireContext().getColor(android.R.color.transparent))
             }
         }
-        //clear selectedHour
-        appointmentHour = ""
     }
 
     private fun initializeAlertDialogAndSave() {
 
-        name = binding.EditName.text.toString()
-        appointmentDate.trim()
+        name = binding.EditName.text.toString().trim()
+        appointmentService = binding.autoCompleteMenu.text.toString()
 
         //Get Current Date Time
         val currentDateTime = LocalDateTime.now()
@@ -215,7 +210,13 @@ class ScheduleAppointmentFragment : Fragment(R.layout.fragment_schedule_appointm
             .ofPattern("dd/MM/yyyy HH:mm")
             .format(currentDateTime)
 
-        newAppointment = Appointment(name, formattedCurrentDateTime, appointmentDate, appointmentHour)
+        val newAppointment = Appointment(
+            name,
+            formattedCurrentDateTime,
+            appointmentDate,
+            appointmentHour,
+            appointmentService
+        )
 
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Confirmação de Agendamento")
@@ -246,23 +247,30 @@ class ScheduleAppointmentFragment : Fragment(R.layout.fragment_schedule_appointm
     }
 
     private fun fieldValidation(): Boolean {
+
         name = binding.EditName.text.toString().trim()
         appointmentDate = binding.editDate.text.toString().trim()
+        appointmentService = binding.autoCompleteMenu.text.toString()
 
         return if ( name.isNotEmpty() ){
             binding.textInputName.error = null
 
-            if ( appointmentDate.isNotEmpty() ){
+            if ( appointmentService.isNotEmpty() ){
+                binding.textInputMenu.error = null
 
-                binding.textInputDate.error = null
-                true
+                if ( appointmentDate.isNotEmpty() ){
+                    binding.textInputDate.error = null
+                    true
+
+                }else{
+                    binding.textInputDate.error = "Por favor, selecione uma data válida."
+                    false
+                }
             }else{
-
-                binding.textInputDate.error = "Por favor, selecione uma data válida."
+                binding.textInputMenu.error = "Por favor, escolha um serviço."
                 false
             }
         }else{
-
             binding.textInputName.error = "Por favor, preencha seu nome."
             false
         }

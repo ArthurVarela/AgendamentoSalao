@@ -15,23 +15,12 @@ class AppointmentRepository(private val appointmentDao: AppointmentDao) {
     }
 
     @WorkerThread
-    suspend fun isAppointmentExists(date: String, hour: String): Boolean {
-        return appointmentDao.countAppointmentsByDateAndHour(date, hour) > 0
-    }
-
-    @WorkerThread
     suspend fun insert(appointment: Appointment) {
         appointmentDao.insert( appointment )
-    }
-
-    @WorkerThread
-    suspend fun deleteAll() {
-        appointmentDao.deleteAll()
     }
 
     @WorkerThread
     suspend fun deleteAppointment(appointment: Appointment) {
         appointmentDao.deleteAppointment(appointment)
     }
-
 }

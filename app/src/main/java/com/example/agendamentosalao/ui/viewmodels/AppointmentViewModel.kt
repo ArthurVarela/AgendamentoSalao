@@ -17,23 +17,12 @@ class AppointmentViewModel(private val repository: AppointmentRepository) : View
 
     val allAppointments: LiveData<List<Appointment>> = repository.getAllAppointments.asLiveData()
 
-    fun isAppointmentExists(date: String, hour: String, callback: (Boolean) -> Unit) {
-        viewModelScope.launch {
-            val exists = repository.isAppointmentExists(date, hour)
-            callback(exists)
-        }
-    }
-
     suspend fun getAppointmentsHours(date: String) : MutableList<String?> = viewModelScope.async {
         repository.getAppointmentsHours(date)
     }.await()
 
     fun insert(appointment: Appointment) = viewModelScope.launch {
         repository.insert(appointment)
-    }
-
-    fun deleteAll() = viewModelScope.launch {
-        repository.deleteAll()
     }
 
     fun deleteAppointment(appointment: Appointment) = viewModelScope.launch {

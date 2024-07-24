@@ -35,6 +35,7 @@ class UserAppointmentsFragment : Fragment(R.layout.fragment_user_appointments) {
         appointmentViewModel.allAppointments.observe(viewLifecycleOwner, Observer { appointments ->
             if ( appointments.isNotEmpty() ){
                 userAppointmentsAdapter.addList(appointments)
+
             }else{
                 Toast.makeText(requireContext(), "Você não possui nenhum agendamento", Toast.LENGTH_SHORT).show()
                 findNavController().popBackStack()

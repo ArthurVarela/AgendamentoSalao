@@ -24,7 +24,6 @@ class UserAppointmentsAdapter(
         notifyDataSetChanged()
     }
 
-
     inner class UserAppointmentsViewHolder(
         private val binding: ItemAppointmentListBinding
     ) : ViewHolder(binding.root){
@@ -39,6 +38,7 @@ class UserAppointmentsAdapter(
         }
 
         private fun delete(appointment: Appointment) {
+
             val context = binding.root.context
             MaterialAlertDialogBuilder(context)
                 .setTitle("Cancelar Agendamento")
@@ -49,7 +49,6 @@ class UserAppointmentsAdapter(
                 }
                 .show()
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserAppointmentsViewHolder {

@@ -39,49 +39,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
 
-    <Button
-        android:id="@+id/btnDelete"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="Deletar"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSchedule" />
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputDate"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:clickable="true"
         app:endIconDrawable="@drawable/ic_calendartoday_24"
         app:endIconMode="custom"
         app:endIconTint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputName">
+        app:layout_constraintTop_toBottomOf="@+id/textInputMenu">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editDate"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="false"
             android:hint="Escolha a Data"
             android:inputType="text" />
     </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/teste"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="teste"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnDelete" />
 
     <HorizontalScrollView
         android:id="@+id/horizontalScrollView"
@@ -101,5 +84,38 @@
             app:orientation="horizontal"
             app:useDefaultMargins="true" />
     </HorizontalScrollView>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputMenu"
+        style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="Escolha um serviço"
+        app:boxStrokeErrorColor="?attr/colorError"
+        app:counterOverflowTextAppearance="?attr/textAppearanceBodySmall"
+        app:counterOverflowTextColor="?attr/colorError"
+        app:counterTextAppearance="?attr/textAppearanceBodySmall"
+        app:cursorErrorColor="?attr/colorError"
+        app:errorIconTint="?attr/colorError"
+        app:errorTextAppearance="?attr/textAppearanceBodySmall"
+        app:errorTextColor="?attr/colorError"
+        app:helperTextTextAppearance="?attr/textAppearanceBodySmall"
+        app:hintTextAppearance="?attr/textAppearanceBodySmall"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputName"
+        app:placeholderTextAppearance="?attr/textAppearanceBodyLarge"
+        app:shapeAppearance="?attr/shapeAppearanceCornerExtraSmall">
+
+        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+            android:id="@+id/autoCompleteMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
+    </com.google.android.material.textfield.TextInputLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

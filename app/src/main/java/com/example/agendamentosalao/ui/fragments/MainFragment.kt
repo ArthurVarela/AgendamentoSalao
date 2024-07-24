@@ -18,7 +18,5 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         binding.btnMainSchedule.setOnClickListener {
             findNavController().navigate(R.id.action_mainFragment_to_scheduleAppointmentFragment)
         }
-
     }
-
 }

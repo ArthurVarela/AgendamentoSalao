@@ -46,7 +46,6 @@ android {
 
 dependencies {
 
-    implementation("androidx.gridlayout:gridlayout:1.0.0")
     val nav_version = "2.7.7"
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
@@ -71,6 +70,8 @@ dependencies {
     //implementation("org.jetbrains.kotlin:kotlin-stdblib-jdk7:1.5.10")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.9.0-RC")
+
+    implementation("androidx.gridlayout:gridlayout:1.0.0")
 
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.7.0")
